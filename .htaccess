@@ -1,0 +1,22 @@
+
+RewriteEngine On
+# turn new php version
+AddHandler application/x-httpd-php55 .php .php5 .php4 .php3 
+
+#images|styles|scripts|uploads|_manager|_website|_cache|
+RewriteRule ^(public|.*\.(doc|docx|xls|xlsx|css|js|jpg|mp3|jpeg|gif|swf|xml|png|pdf|ico|zip|rar|php|html|txt|sql|woff|eot|ttf|svg|csv)) - [L]
+
+RewriteCond %{REQUEST_FILENAME} !-f [OR]
+RewriteCond %{REQUEST_FILENAME} !-d
+
+RewriteRule . index.php [QSA,L]
+# choose opener file
+DirectoryIndex index.php 
+
+<IfModule php5_module>
+    php_flag session.cookie_httponly on
+</IfModule>
+
+# force non-www domain
+RewriteCond %{HTTP_HOST} ^www\.(.*)$ [NC]
+RewriteRule ^(.*)$ http://%1/$1 [R=301,L]
