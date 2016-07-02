@@ -7,6 +7,7 @@ use lib\database\connection as connection;
 use lib\database\pagedata as pagedata;
 use lib\functions\url as url;
 use lib\template\header as head;
+use lib\database\navigation as navigation;
 use lib\template\footer as footer;
 
 class page{
@@ -30,30 +31,33 @@ class page{
 	}
 
 	public function bootstap(){
-		// $slug = new url\slug();
-		// $params = $slug->params();
-		
+		$c = new c();		
 		$this->head = new head();
+		$this->navObject = new navigation();
+		$this->slug = new url\slug();
+		$this->params = $this->slug->params();
+		$this->nav = $this->navObject->select($this->conn);		
+		$this->cat = $this->navObject->cat($this->conn, $this->params);		
 		$this->footer = new footer();
 		
 		echo $this->head->html_header();
 		switch ($this->page['pagetype']) { 
 			case 'textpage': 
-				// $about_object = new \lib\database\about();
-				// $about = $about_object->select($this->conn);
 				@include("website/textpage.php");
 				break;
 
 			case 'plugin': 
 				$file = "website/".$this->page['slug'].".php";
 				if(file_exists($file)){
-					@include("website/textpage.php");
+					@include($file);
 				}else{
 					@include("website/homepage.php");
 				}
 				break;
 
 			default:
+				$projects_object = new \lib\database\projects();
+				$projects = $projects_object->select($this->conn);
 				@include("website/homepage.php");
 				break;
 		}

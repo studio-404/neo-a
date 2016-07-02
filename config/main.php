@@ -5,6 +5,7 @@ class main{
 
 	const CHARSET = "utf-8";
 	const WEBSITE = "http://neo-a.404.ge/";
+	const PUBLIC_FOLDER = "http://neo-a.404.ge/public/";
 	const AUTHER = "Studio 404";
 	const NAME = "Neo Art";
 	const DESC = "NEo ArT";

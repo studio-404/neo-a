@@ -9,7 +9,7 @@ class pagedata{
 		$slug = new slug(); 
 		$params = $slug->params();
 		if(empty($params[0])){
-			$params[0] = "welcome";
+			$params[0] = "projects";
 		}
 		$sql = 'SELECT * FROM `pages` WHERE `slug`=:params AND `hidden`!=1 AND `status`!=1';
 		$prepare = $conn->prepare($sql);
