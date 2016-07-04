@@ -99,8 +99,12 @@ class header{
 	}
 
 	private function css(){
-		$out .= sprintf(
+		$out = sprintf(
 			"<link type=\"text/css\" rel=\"stylesheet\" href=\"%spublic/css/style.css\" />\n",
+			c::WEBSITE
+		);
+		$out .= sprintf(
+			"<link type=\"text/css\" rel=\"stylesheet\" href=\"%spublic/css/pgwslider.min.css\" />\n",
 			c::WEBSITE
 		);
 		return $out;

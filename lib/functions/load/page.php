@@ -48,13 +48,24 @@ class page{
 
 			case 'plugin': 
 				$file = "website/".$this->page['slug'].".php";
+				if($this->page['slug']=="contact-us"){
+					$contact_object = new \lib\database\contact();
+					$this->contactinfo = $contact_object->info($this->conn);
+				}
 				if(file_exists($file)){
 					@include($file);
 				}else{
 					@include("website/homepage.php");
 				}
 				break;
-
+			case 'projectpage':
+				$object = new \lib\database\projects();
+				$select_one = $object->select_one($this->conn); 
+				$this->projectDesc = array_slice($select_one, 0, 1);
+				$this->projectPhotos = array_slice($select_one, 1);
+				$rightside = array_slice($select_one, 1);
+				@include("website/projectpage.php");
+				break;
 			default:
 				$projects_object = new \lib\database\projects();
 				$projects = $projects_object->select($this->conn);

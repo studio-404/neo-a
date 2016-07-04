@@ -5,7 +5,7 @@ use lib\functions\url\slug as slug;
 
 class navigation{
 	public function select($conn){
-		$sql = 'SELECT * FROM `pages` WHERE `pagetype`!="catalog" AND `hidden`!=1 AND `status`!=1 ORDER BY `position` ASC';
+		$sql = 'SELECT * FROM `pages` WHERE `pagetype`!="catalog" AND `pagetype`!="projectpage" AND `hidden`!=1 AND `status`!=1 ORDER BY `position` ASC';
 		$prepare = $conn->prepare($sql);
 		$prepare->execute();
 		$fetch = $prepare->fetchAll(\PDO::FETCH_ASSOC);

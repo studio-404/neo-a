@@ -5,6 +5,10 @@ $(document).ready(function(){
 $(document).on("click", '.copyright', function(e){
 	Studio404.locationChange($(this).attr('data-gourl'), "_blank");
 });
+
+$(document).on("click", ".content .leftside .text form label", function(){
+	Studio404.fomrInputAnimate($(this));
+});
  
 $(window).scroll(function(){
 	Studio404.windowScroll();
@@ -19,6 +23,20 @@ var Studio404 = {
 		 	// Studio404.mobileSlideDown();
 		}
 	},
+	fomrInputAnimate: function(th){
+		var dat = th.attr("data-input");
+		th.css({"font-size":"12px", "line-height":"14px"}); 
+		if(dat=="message"){
+			$("#"+dat).animate({height:80},400).focus();
+		}else{
+			$("#"+dat).animate({height:25},200).focus();
+		}
+	},
+	tabKeyChecker: function(e, clickIt, focusIt) {
+        var TABKEY = 9;
+        if(e.keyCode == TABKEY) {
+        }
+    },
 	selectMenuItems: function(){
 		var ins = '<li>';
 		ins += '<form action="javascript:void(0)" method="post">';

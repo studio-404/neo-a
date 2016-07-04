@@ -14,6 +14,9 @@ class main{
 	const DB = "geoweb_neo";
 	const DB_USER = "geoweb_ww";
 	const DB_PASS = "_$%k3!)l.Z]S!q+$%C";
+	const SESSION_PREFIX = "neo_";
+	const ADMIN_USER = "neo";
+	const ADMIN_PASS = "549";
 
 }
 ?>

@@ -1,6 +1,19 @@
+<?php
+if($this->request->method("GET","admin")){
+	$admin = new \lib\template\admin();
+	echo $admin->module();
+}
+?>
 <header class="container">
 	<div class="logo">
-		<a href="<?=$c::WEBSITE?>">
+		<?php
+		if($this->request->method("GET","admin")=="true" && isset($_SESSION[$c::SESSION_PREFIX."username"])){
+			$logoLink = $c::WEBSITE."?admin=true";
+		}else{
+			$logoLink = $c::WEBSITE;
+		}
+		?>
+		<a href="<?=$logoLink?>">
 			<img src="<?=$c::PUBLIC_FOLDER?>/img/logo.svg" alt="logo" />
 		</a>
 	</div>
@@ -21,15 +34,28 @@
 				}else{
 					$active = "";
 				}
-				echo sprintf(
-					'<li data-subm=".sub-%s">
-					<a href="/%s" class="%s">%s</a>
-					</li>',
-					$n['id'],
-					$n['slug'],
-					$active,
-					$n['title']
-				);
+				if($this->request->method("GET","admin")=="true" && isset($_SESSION[$c::SESSION_PREFIX."username"])){
+					$s = $n['slug']."?admin=true";
+					echo sprintf(
+						'<li data-subm=".sub-%s">
+						<a href="/%s" class="%s">%s</a>
+						</li>',
+						$n['id'],
+						$s,
+						$active,
+						$n['title']
+					);
+				}else{
+					echo sprintf(
+						'<li data-subm=".sub-%s">
+						<a href="/%s" class="%s">%s</a>
+						</li>',
+						$n['id'],
+						$n['slug'],
+						$active,
+						$n['title']
+					);
+				}
 			}
 			?>
 			<li class="icon">
@@ -49,14 +75,28 @@
 				}else{
 					$active = "";
 				}
-				echo sprintf(
-					'<li>
-					<a href="/projects/%s" class="%s">%s</a>
-					</li>',
-					$n['slug'],
-					$active,
-					$n['title']
-				);
+
+				if($this->request->method("GET","admin")=="true" && isset($_SESSION[$c::SESSION_PREFIX."username"])){
+					$s = $n['slug']."?admin=true";
+					echo sprintf(
+						'<li>
+						<a href="/projects/%s" class="%s">%s</a>
+						</li>',
+						$s,
+						$active,
+						$n['title']
+					);
+				}else{
+					echo sprintf(
+						'<li>
+						<a href="/projects/%s" class="%s">%s</a>
+						</li>',
+						$n['slug'],
+						$active,
+						$n['title']
+					);
+				}
+				
 				$x++;
 			}
 			endif; 

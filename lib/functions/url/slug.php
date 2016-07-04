@@ -12,8 +12,9 @@ class slug{
 		$this->params = "";
 		$geturl = currenturl::geturl();
 		$exp = explode(c::WEBSITE, $geturl);
-		if(!empty($exp[1])){
-			$this->params = explode("/", $exp[1]);
+		$ex = explode("?", $exp[1]);
+		if(!empty($ex[0])){
+			$this->params = explode("/", $ex[0]);
 		}
 		return $this->params;
 	}
