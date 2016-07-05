@@ -3,6 +3,8 @@ namespace config;
 
 class main{
 
+	const DIR = "/home/geoweb/neo-a.404.ge/";
+	const PUBLIC_FOLDER_NAME = "public";
 	const CHARSET = "utf-8";
 	const WEBSITE = "http://neo-a.404.ge/";
 	const PUBLIC_FOLDER = "http://neo-a.404.ge/public/";

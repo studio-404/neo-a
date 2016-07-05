@@ -15,17 +15,42 @@ class receive{
 	}
 
 	public function geta(){
-
-		if($this->request->method("POST", "load")){
+		if(
+			$this->request->method("GET","ajax") && 
+			$this->request->method("GET","uploadFile")
+		)
+		{
+			$str = file_get_contents("php://input");
+			$filename = md5(time()).".jpg";
+			$path = c::DIR."/".c::PUBLIC_FOLDER_NAME.'/img/team/'.$filename;
+			$outFile = c::WEBSITE."/".c::PUBLIC_FOLDER_NAME.'/img/team/'.$filename;
+			file_put_contents($path, $str);
+			$size = getimagesize($path);
+			$extension = image_type_to_extension($size[2]);
 			$out = array();
-			switch($this->request->method("POST", "load")){
-				case "getAbout":
-				// $object = new \lib\database\about();
-				// $out = $object->select($this->conn);
+			if($extension==".jpeg"){
+				$out["message"] = "Image Uploaded Successfully !"; 
+				$out["image_filename"] = $filename; 
+				$out["image_tag"] = "<img src=\"".$outFile."\" width=\"100%\" alt=\"\" />"; 
+			}else{
+				$out["message"] = "Sorry, we could not upload this file !"; 
+				$out["image_filename"] = ""; 
+				$out["image_tag"] = "Sorry, we could not upload this file !";
+			}
+			echo json_encode($out);
+		}else if($this->request->method("POST", "ajax")){
+			$request = json_decode($this->request->method("POST", "r"), true);
+			$out = array();
+			switch($request[0]){
+				case "updateTheStudio":
+				$title = $request[1];
+				$content = $request[2];
+				$out["message"] = "Wow";
 				break;
 			}			
 			echo json_encode($out);
-		}	
+		}
+
 
 	}
 }

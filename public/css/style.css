@@ -1,4 +1,4 @@
-*{ word-wrap: break-word; }
+*{ word-wrap: break-word; font-family: 'FuturaMedium'; font-size: 16px; }
 body { margin:0; padding:0; }
 @font-face {
   font-family: 'FuturaMedium';
@@ -104,6 +104,8 @@ body { margin:0; padding:0; }
 .administrator font{ margin: 0; padding: 0; color: red; font-family: 'FuturaMedium'; font-size: 16px; }
 .administrator a{ color: #000000; font-family: 'FuturaMedium'; font-size: 16px;}
 .administrator form .removePanel{ float:right; }
+.dragableArea{ margin: 0 0 10px 0; padding: 50px 0; text-align: center; width: calc(100% - 2px); background-color: #cccccc; border: solid 1px #555555; float: left; clear: both; }
+#bgfile{ margin: 0; padding: 0; width: 1px; height: 1px; position: absolute; opacity: 0; }
 
 .footer{ margin: 0 auto; padding: 0; width: 80%; clear: both; }
 .footer .copyright{ margin: 40px 0 10px 0; padding: 0; width: 80px; float: right; display: block; cursor: pointer; }

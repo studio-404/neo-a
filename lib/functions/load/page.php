@@ -23,7 +23,10 @@ class page{
 		$this->page = $pagedata->select($this->conn);
 
 		$this->request = new url\request();
-		if($this->request->method("POST", "ajax")=="true"){
+		if(
+			$this->request->method("POST", "ajax")=="true" || 
+			$this->request->method("GET", "ajax")=="true"
+		){
 			$ajax = new ajax();
 			echo $ajax->geta();	
 			exit();
