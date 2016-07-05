@@ -4,6 +4,34 @@ if($this->request->method("GET","admin")){
 	echo $admin->module();
 }
 ?>
+<div class="mask" onclick="Studio404.closePopup()"></div>
+<div class="popup">
+	<form action="" method="post">
+		<h4>Manage Catalog</h4>
+		<div class="recivedData">
+			<div class="formbox">
+				<input type="text" name="title" value="title" />
+				<input type="text" name="slug" value="slug" />
+				<a href="">x</a>
+			</div><div class="clearer"></div>
+			
+			<div class="formbox">
+				<input type="text" name="title" value="title" />
+				<input type="text" name="slug" value="slug" />
+				<a href="">x</a>
+			</div><div class="clearer"></div>
+			
+			<div class="formbox">
+				<input type="text" name="title" value="title" />
+				<input type="text" name="slug" value="slug" />
+				<a href="">x</a>
+			</div><div class="clearer"></div>
+		</div>
+
+		<input type="button" value="Add Item" onclick="Studio404.appendCatalog()" />
+		<input type="button" value="Save Changes" id="ChangeCatalog" />
+	</form>
+</div>
 <header class="container">
 	<div class="logo">
 		<?php
@@ -99,7 +127,14 @@ if($this->request->method("GET","admin")){
 				
 				$x++;
 			}
-			endif; 
+			if($this->request->method("GET","admin")=="true" && isset($_SESSION[$c::SESSION_PREFIX."username"])){
+				echo sprintf(
+						'<li>
+						<a href="javascript:void(0)" style="color:red" onclick="Studio404.showPopup(this, \'ManageCatalog\')">Manage Catalog</a>
+						</li>'
+				);
+			}
+			endif; 			
 			echo '</ul>';
 		?>
 	</nav>

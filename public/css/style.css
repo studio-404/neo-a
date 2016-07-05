@@ -106,9 +106,28 @@ body { margin:0; padding:0; }
 .administrator form .removePanel{ float:right; }
 .dragableArea{ margin: 0 0 10px 0; padding: 50px 0; text-align: center; width: calc(100% - 2px); background-color: #cccccc; border: solid 1px #555555; float: left; clear: both; }
 #bgfile{ margin: 0; padding: 0; width: 1px; height: 1px; position: absolute; opacity: 0; }
+.mask{ margin: 0; padding: 0; width: 100%; height: 100%; position: fixed; background-color: #000000; opacity: 0.6; z-index: 1000; top: 0; left: 0; display: none; }
+.popup{ margin: 0 30%; padding: 20px; width: 40%; position: absolute; background-color: white; z-index: 1001; top: 20px; display: none; }
+.popup form{ margin:0px; padding: 0; }
+.popup form h4{ margin:10px 0; padding: 0; font-size: 18px; }
+.popup form .formbox{ margin:0 0 10px 0; padding: 0; width: 100%; float: left; clear: both; }
+.popup form .formbox input[type="text"]{ 
+    margin:0 1% 0 0;
+    width: calc(44% - 12px); 
+    float: left;
+    padding: 0;
+    border: 0;
+    height: 25px;
+    border-bottom: 1px solid #000000;
+    background-color: white;
+    font-family: 'FuturaMedium';
+    font-size: 16px;
+}
+.popup form .formbox a{ margin:0; padding: 0; outline: solid 1px #cccccc; text-align: center; text-decoration: none; width: 8%; float: right; height: 25px; line-height: 25px; color: #000000; font-size: 23px; }
+.popup form input[type="button"]{ margin: 20px 10px 0 0; padding: 1px 10px; border: solid 1px #000000; display: block; line-height: 20px; text-decoration: none; color: #000000; font-family: 'FuturaMedium'; font-size: 16px; background-color: white; display: block; cursor: pointer; float: left; }
 
 .footer{ margin: 0 auto; padding: 0; width: 80%; clear: both; }
-.footer .copyright{ margin: 40px 0 10px 0; padding: 0; width: 80px; float: right; display: block; cursor: pointer; }
+.footer .copyright{ margin: 40px 0 10px 0; padding: 0; width: 80px; float: right; cursor: pointer; }
 
 @media (max-width: 992px) {
   .container{ width: 90%; }

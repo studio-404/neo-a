@@ -16,6 +16,18 @@ $(document).on("click", "#updateTheStudio", function(){
 	info[0] = 'updateTheStudio';
 	info[1] = $("#studio_title").val();
 	info[2] = $("#studio_content").val();
+	info[3] = $("#studio_upfile").val();
+	var json = JSON.stringify(info);
+ 	Studio404.ajaxUpdate(json);
+});
+
+$(document).on("click", "#updateContactInfo", function(){
+	info = [];
+	info[0] = 'updateContactInfo';
+	info[1] = $("#studio_address").val();
+	info[2] = $("#studio_phone").val();
+	info[3] = $("#studio_email").val();
+	info[4] = $("#studio_map").val();
 	var json = JSON.stringify(info);
  	Studio404.ajaxUpdate(json);
 });
@@ -168,14 +180,16 @@ var Studio404 = {
 					var res = xhr.responseText;
 					var obj = $.parseJSON(res);
 					$('#img').html(obj.image_tag);
-					$('#upfile').val(obj.image_filename);
+					$('#studio_upfile').val(obj.image_filename);
 				}
 			}
 		}
 	},
 	ajaxUpdate: function(r){
+		$(".messagex").html("Please wait...");
 		$.post(this.ajax, { ajax:"true", r:r }, function(d){
-			console.log(d); 
+			var obj = $.parseJSON(d);
+			$(".messagex").html(obj.message);
 		});
 	},
 	isAjaxCalled: false,
@@ -188,5 +202,38 @@ var Studio404 = {
 	},
 	ajaxRequestOnScroll: function(){
 		console.log("ajax request done");
+	},
+	showPopup: function(e, t){
+		$(e).html('Please Wait...');
+		if(t=="ManageCatalog"){
+			info = [];
+			info[0] = 'selectCatalog';
+			var json = JSON.stringify(info);
+			$.post(this.ajax, { ajax:"true", r:json }, function(d){
+				var obj = $.parseJSON(d);
+				$(e).html('Manage Catalog');
+				$(".mask, .popup").css("display","block"); 
+				var catalogList = obj.catalogList;
+				var out = '';
+				for (var i = catalogList.length - 1; i >= 0; i--) {
+					out += '<div class="formbox">';
+					out += '<input type="text" name="title" value="'+catalogList[i].title+'" />';
+					out += '<input type="text" name="slug" value="'+catalogList[i].slug+'" />';
+					out += '<a href="">x</a>';
+					out += '</div><div class="clearer"></div>';
+				}
+				$(".recivedData").html(out);
+			});
+		}
+	},
+	appendCatalog: function(){
+		var out = '<div class="formbox">';
+		out += '<input type="text" name="title" value="" />';
+		out += '<input type="text" name="slug" value="" />';
+		out += '</div><div class="clearer"></div>';
+		$(".recivedData").append(out);
+	},
+	closePopup: function(){
+		$(".mask, .popup").fadeOut(); 
 	}
 };

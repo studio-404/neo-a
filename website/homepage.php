@@ -8,9 +8,13 @@
 			if(count($projects)==1){ $st = ' single'; }
 			else{ $st=''; }
 			foreach ($projects as $value) {
+				$adminSlug = "";
+				if($this->request->method("GET","admin")=="true" && isset($_SESSION[$c::SESSION_PREFIX."username"])){
+					$adminSlug = "?admin=true";
+				}
 				echo sprintf(
 					'<div class="project-item %s">
-					<a href="%sview/%s">
+					<a href="%sview/%s%s">
 					<img src="%simg/projects/%s" alt="" />
 					<p class="text">%s</p>
 					<p class="year">%s</p>
@@ -19,6 +23,7 @@
 					$st,
 					$c::WEBSITE,
 					$value['p_id'],
+					$adminSlug,
 					$c::PUBLIC_FOLDER,
 					$value['p_photo'],
 					$value['p_title'],
