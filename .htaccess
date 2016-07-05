@@ -1,4 +1,3 @@
-
 RewriteEngine On
 # turn new php version
 AddHandler application/x-httpd-php55 .php .php5 .php4 .php3 
