@@ -104,7 +104,7 @@ class header{
 			c::WEBSITE
 		);
 		$out .= sprintf(
-			"<link type=\"text/css\" rel=\"stylesheet\" href=\"%spublic/css/pgwslider.min.css\" />\n",
+			"<link type=\"text/css\" rel=\"stylesheet\" href=\"%spublic/css/jquery-ui.css\" />\n",
 			c::WEBSITE
 		);
 		return $out;
@@ -113,6 +113,10 @@ class header{
 	private function js(){
 		$out = sprintf(
 			"<script src=\"%spublic/js/jquery-1.11.2.min.js\" type=\"text/javascript\"></script>\n", 
+			c::WEBSITE
+		);
+		$out .= sprintf(
+			"<script src=\"%spublic/js/jquery-ui.js\" type=\"text/javascript\"></script>\n", 
 			c::WEBSITE
 		);
 		$out .= sprintf(

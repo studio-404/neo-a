@@ -31,6 +31,20 @@ $(document).on("click", "#updateContactInfo", function(){
 	var json = JSON.stringify(info);
  	Studio404.ajaxUpdate(json);
 });
+
+$(document).on("click", "#ChangeCatalog", function(){
+	info = [];
+	info[0] = 'updateCatalogList';
+	var x=0;
+	inp = [];
+	$(".recivedData .formbox input").each(function(){
+		inp[x] = [$(this).attr("data-type"),$(this).val()];
+		x++;
+	});
+	info[1] = inp;
+	var json = JSON.stringify(info);
+ 	Studio404.ajaxUpdate(json);
+});
  
 $(window).scroll(function(){
 	Studio404.windowScroll();
@@ -212,24 +226,85 @@ var Studio404 = {
 			$.post(this.ajax, { ajax:"true", r:json }, function(d){
 				var obj = $.parseJSON(d);
 				$(e).html('Manage Catalog');
+				$("#popup_title").html("Manage Catalog");
+				$("#popup_body").html('<div class="recivedData"></div><input type="button" value="Add Item" onclick="Studio404.appendCatalog()" /><input type="button" value="Save Changes" id="ChangeCatalog" />');
 				$(".mask, .popup").css("display","block"); 
 				var catalogList = obj.catalogList;
 				var out = '';
-				for (var i = catalogList.length - 1; i >= 0; i--) {
-					out += '<div class="formbox">';
-					out += '<input type="text" name="title" value="'+catalogList[i].title+'" />';
-					out += '<input type="text" name="slug" value="'+catalogList[i].slug+'" />';
-					out += '<a href="">x</a>';
+				for (var i = 0; i <= catalogList.length - 1; i++) {
+					out += '<div class="formbox" id="i'+catalogList[i].id+'">'; 
+					out += '<input type="hidden" name="item" data-type="item" value="'+catalogList[i].id+'" />';
+					out += '<input type="text" name="title" data-type="title" value="'+catalogList[i].title+'" />';
+					out += '<input type="text" name="slug" data-type="slug" value="'+catalogList[i].slug+'" />';
+					out += '<a href="javascript:void(0)" onclick="Studio404.removeCatalogItem(\''+catalogList[i].id+'\')">x</a>';
 					out += '</div><div class="clearer"></div>';
 				}
-				$(".recivedData").html(out);
+				$(".recivedData").html(out); 
+				$(".recivedData").sortable();
 			});
+		}else if(t=="addCatalogItem"){
+			$(e).html('Add Catalog Item');
+			info = [];
+			info[0] = 'selectCatalog';
+			var json = JSON.stringify(info);
+			$.post(this.ajax, { ajax:"true", r:json }, function(d){
+				var obj = $.parseJSON(d);
+				$("#popup_title").html("Add Catalog Item");
+				var ins = '<input type="hidden" name="postrequest" value="addcatalogitem" />';
+				ins += '<div class="formbox">';
+				ins += '<input type="text" name="item_title" value="" placeholder="Title" style="width:49%" />';
+				ins += '<input type="text" name="item_date" value="" placeholder="Date Format: mm-dd-YYYY" style="width:49%" />';
+				ins += '<textarea name="item_description" class="textarea" style="margin:10px 0; height:120px" placeholder="Describe..."></textarea>';
+				
+				ins += '<select name="item_catalogList" class="catalogList">';
+				ins += '<option value="">Choose Catalog</option>';
+				var catalogList = obj.catalogList;
+				var slug = $(e).attr("data-slug");
+				for (var i = 0; i <= catalogList.length - 1; i++) {
+					if(catalogList[i].slug==slug){
+						ins += '<option value="'+catalogList[i].id+'" selected="selected">'+catalogList[i].title+'</option>';
+					}else{
+						ins += '<option value="'+catalogList[i].id+'">'+catalogList[i].title+'</option>';
+					}
+				}
+				ins += '</select>';
+
+				ins += '<div class="pimages" style="margin:15px 0 0 0">';
+				ins += '<input type="file" name="item_file[]" value="" style="width:100%" />';
+				ins += '</div>';
+				ins += '</div>';
+				ins += '<input type="button" value="Add More image" onclick="Studio404.appendMoreImage()" />';
+				ins += '<input type="button" value="Insert Project" onclick="$(\'#popup_form\').submit()" />';
+				$("#popup_body").html(ins);
+				$(".mask, .popup").css("display","block");
+			});
+		}
+	},
+	appendMoreImage: function(){
+		var ins = '<input type="file" name="item_file[]" value="" style="width:100%; margin-top:10px" />';
+		$(".pimages").append(ins);
+	},
+	removeCatalogItem: function(i){
+		if(confirm("whould you like to delete item ?") == true){
+			$(".messagex").html('Please Wait...');
+			info = [];
+			info[0] = 'deleteCatalogItem';
+			info[1] = i;
+			var json = JSON.stringify(info);
+		 	$.post(this.ajax, { ajax:"true", r:json }, function(d){
+		 		var obj = $.parseJSON(d);
+		 		if(obj.status=="true"){
+		 			$("#i"+i).fadeOut();
+		 		}
+		 		$(".messagex").html(obj.message);
+		 	});
 		}
 	},
 	appendCatalog: function(){
 		var out = '<div class="formbox">';
-		out += '<input type="text" name="title" value="" />';
-		out += '<input type="text" name="slug" value="" />';
+		out += '<input type="hidden" name="item" data-type="item" value="new" />';
+		out += '<input type="text" data-type="title" name="title" value="" />';
+		out += '<input type="text" data-type="slug" name="slug" value="" />';
 		out += '</div><div class="clearer"></div>';
 		$(".recivedData").append(out);
 	},

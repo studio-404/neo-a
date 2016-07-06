@@ -5,9 +5,10 @@ use config\main as c;
 use lib\ajax\receive as ajax;
 use lib\database\connection as connection;
 use lib\database\pagedata as pagedata;
+use lib\database\navigation as navigation;
+use lib\database\projects as projects;
 use lib\functions\url as url;
 use lib\template\header as head;
-use lib\database\navigation as navigation;
 use lib\template\footer as footer;
 
 class page{
@@ -21,8 +22,8 @@ class page{
 		$this->conn = $this->connection->conn();
 		$pagedata = new pagedata();
 		$this->page = $pagedata->select($this->conn);
-
 		$this->request = new url\request();
+		$this->receivePost();
 		if(
 			$this->request->method("POST", "ajax")=="true" || 
 			$this->request->method("GET", "ajax")=="true"
@@ -30,6 +31,17 @@ class page{
 			$ajax = new ajax();
 			echo $ajax->geta();	
 			exit();
+		}
+	}
+
+	private function receivePost(){
+		if($this->request->method("POST","postrequest")=="addcatalogitem"){
+			$data[0] = $this->request->method("POST","item_title");
+			$data[1] = $this->request->method("POST","item_date");
+			$data[2] = $this->request->method("POST","item_description");
+			$data[3] = $this->request->method("POST","item_catalogList");
+			$projects = new projects();
+			$projects->insert_project($this->conn, $data);
 		}
 	}
 

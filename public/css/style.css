@@ -20,7 +20,7 @@ body { margin:0; padding:0; }
 }
 
 .clearer { clear: both; }
-.container{ margin: 0 auto; padding: 0; width: 80%; background-color: #fff; position: relative; }
+.container{ margin: 0 auto; padding: 0; width:1000px; background-color: #fff; position: relative; }
 .container .logo{ margin: 60px 0 0 0; padding: 0; width: 22%; float: left; }
 .container .logo a{ margin: 0; padding: 0; border: 0; outline: 0; display: block; text-decoration: none; }
 .container .logo a img{ margin: 0; padding: 0; border: 0; outline: 0; width: 100%; }
@@ -51,7 +51,7 @@ body { margin:0; padding:0; }
 .container .mobileNav ul li form input[type="submit"]{ margin: 0; padding: 0; border: 0; outline: 0; width: 30px; height: 30px; float: right; background-color: #ffffff; background-image: url('../img/search.png'); background-size: 20px 20px; background-repeat: no-repeat; background-position: center center; cursor: pointer; }
 .container .mobileNav .submenu{ margin-left: 20px; width: calc(100% - 20px); }
 
-.content{ margin: 0 auto; padding: 0; width: 80%; min-height: 450px; clear: both; }
+.content{ margin: 0 auto; padding: 0; width: 1000px; min-height: 450px; clear: both; }
 .content .project-box{ margin:0px -1%; display: -webkit-box; display: -webkit-flex; display: -ms-flexbox; display: flex; -webkit-box-align: stretch; -webkit-align-items: stretch; -ms-flex-align: stretch; align-items: stretch; -webkit-flex-wrap: wrap; -ms-flex-wrap: wrap; flex-wrap: wrap; float: left; margin-top: 20px; }
 .content .project-box .project-item{ width:23%; margin: 10px 1%; padding: 0; border-bottom: solid 1px #000000; }
 .content .project-box .project-item a{ display: block; text-decoration: none; color: #000000; }
@@ -96,7 +96,7 @@ body { margin:0; padding:0; }
 .pgwSlider .ps-current{ float: right !important; }
 .ps-list{ float: left !important; }
 
-.administrator{ margin: 0 auto; padding: 10px 5px; width: calc(80% - 10px); background-color: #f2f2f2; border-bottom: solid 1px #000000; font-family: 'FuturaMedium'; font-size: 16px; }
+.administrator{ margin: 0 auto; padding: 10px 5px; width: 1000px; background-color: #f2f2f2; border-bottom: solid 1px #000000; font-family: 'FuturaMedium'; font-size: 16px; }
 .administrator form{ margin: 0; padding: 0; }
 .administrator form label{ margin: 0; padding: 0; font-family: 'FuturaMedium'; font-size: 16px; }
 .administrator form input[type="text"]{ margin: 0; padding: 1px 5px; font-family: 'FuturaMedium'; font-size: 16px; }
@@ -122,11 +122,13 @@ body { margin:0; padding:0; }
     background-color: white;
     font-family: 'FuturaMedium';
     font-size: 16px;
+    outline: none
 }
 .popup form .formbox a{ margin:0; padding: 0; outline: solid 1px #cccccc; text-align: center; text-decoration: none; width: 8%; float: right; height: 25px; line-height: 25px; color: #000000; font-size: 23px; }
 .popup form input[type="button"]{ margin: 20px 10px 0 0; padding: 1px 10px; border: solid 1px #000000; display: block; line-height: 20px; text-decoration: none; color: #000000; font-family: 'FuturaMedium'; font-size: 16px; background-color: white; display: block; cursor: pointer; float: left; }
-
-.footer{ margin: 0 auto; padding: 0; width: 80%; clear: both; }
+.textarea{ margin: 0 0 20px 0; outline:0; padding: 0; border: 0; width: 100%; height: 1px; border-bottom: 1px solid #000000; background-color: white; font-family: 'FuturaMedium'; font-size: 16px; float: left; resize: none; }
+.catalogList{ margin: 20px 0; padding: 0; width: 100%; height: 30px; background-color: white; border: 0px; border-bottom: solid 1px #000000; outline: none; }
+.footer{ margin: 0 auto; padding: 0; width: 1000px; clear: both; }
 .footer .copyright{ margin: 40px 0 10px 0; padding: 0; width: 80px; float: right; cursor: pointer; }
 
 @media (max-width: 992px) {

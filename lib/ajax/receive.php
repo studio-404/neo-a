@@ -4,6 +4,7 @@ namespace lib\ajax;
 use config\main as c;
 use lib\functions\url as url;
 use lib\database\connection as connection;
+use lib\database\pagedata as pagedata;
 
 class receive{
 
@@ -101,6 +102,96 @@ class receive{
 				}
 				$out["catalogList"] = $fetch;
 				$out["message"] = "Catalog Item Selected !";
+				break;
+				case "updateCatalogList":
+					$x = 0;
+					$o = array();
+					$pagedata = new pagedata();
+					foreach ($request[1] as $v) {
+						if($x==0){
+							$o['id'][] = $v[1];
+							$x++;
+						}else if($x==1){
+							$o['title'][] = $v[1];
+							$x++;
+						}else{
+							$o['slug'][] = $v[1];
+							$x = 0;
+						}
+					}
+					$y = 0;
+					foreach ($o["id"] as $v2) {
+						$id = $o["id"][$y];
+						$title = $o["title"][$y];
+						$slug = $o["slug"][$y];
+						if($id=="new"){
+							if(!empty($title) && !empty($slug)) :
+							$sql = 'INSERT INTO `pages` SET 
+							`sub`=1, 
+							`meta_title`=:meta_title, 
+							`title`=:title, 
+							`slug`=:slug,  
+							`pagetype`=:pagetype,  
+							`position`=:position  
+							';
+							$prepare = $this->conn->prepare($sql);
+							$prepare->execute(array(
+								":meta_title"=>$title, 
+								":title"=>$title, 
+								":slug"=>$slug, 
+								":pagetype"=>"catalog",
+								":position"=>$pagedata->maxCatalogPosition($this->conn) 
+							));
+							endif;
+						}else{
+							$sql = 'UPDATE `pages` SET `title`=:title, `slug`=:slug, `position`=:newposition WHERE `id`=:id';
+							$prepare = $this->conn->prepare($sql);
+							$newposition = $y + 2;
+							$prepare->execute(array(
+								":title"=>$title, 
+								":slug"=>$slug, 
+								":id"=>$id,
+								":newposition"=>$newposition
+							));
+						}
+						$y++;
+					}
+					$out["message"] = "Catalog updated !";
+				break;
+				case "deleteCatalogItem":
+				$id = $request[1];
+				$sql = 'SELECT `position` FROM `pages` WHERE `id`=:id';
+				$prepare = $this->conn->prepare($sql);
+				$prepare->execute(array( 
+					":id"=>$id 
+				));
+				if($prepare->rowCount()){
+					$fetch = $prepare->fetch(\PDO::FETCH_ASSOC);
+					$sql2 = 'UPDATE `pages` SET `status`=1 WHERE `id`=:id';
+					$prepare2 = $this->conn->prepare($sql2);
+					$prepare2->execute(array( 
+						":id"=>$id 
+					));	
+					$sql3 = 'SELECT `id`,`position` FROM `pages` WHERE `position`>:oldposition AND `pagetype`="catalog" AND `status`!=1';
+					$prepare3 = $this->conn->prepare($sql3);
+					$prepare3->execute(array( 
+						":oldposition"=>$fetch['position']
+					));	
+					if($prepare3->rowCount()){
+						$fetch3 = $prepare3->fetchAll(\PDO::FETCH_ASSOC);
+						foreach ($fetch3 as $val3) {
+							$sql4 = 'UPDATE `pages` SET `position`=:newposition WHERE `id`=:id';
+							$prepare4 = $this->conn->prepare($sql4);
+							$newposition = $val3['position']-1;
+							$prepare4->execute(array(
+								":newposition"=>$newposition,
+								":id"=>$val3['id']
+							));
+						}						
+					}
+					$out["message"] = "Catalog item Deleted successfuly !";
+					$out["status"] = "true";
+				}				
 				break;
 			}			
 			echo json_encode($out);

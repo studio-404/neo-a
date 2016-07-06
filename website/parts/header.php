@@ -6,30 +6,11 @@ if($this->request->method("GET","admin")){
 ?>
 <div class="mask" onclick="Studio404.closePopup()"></div>
 <div class="popup">
-	<form action="" method="post">
-		<h4>Manage Catalog</h4>
-		<div class="recivedData">
-			<div class="formbox">
-				<input type="text" name="title" value="title" />
-				<input type="text" name="slug" value="slug" />
-				<a href="">x</a>
-			</div><div class="clearer"></div>
-			
-			<div class="formbox">
-				<input type="text" name="title" value="title" />
-				<input type="text" name="slug" value="slug" />
-				<a href="">x</a>
-			</div><div class="clearer"></div>
-			
-			<div class="formbox">
-				<input type="text" name="title" value="title" />
-				<input type="text" name="slug" value="slug" />
-				<a href="">x</a>
-			</div><div class="clearer"></div>
-		</div>
-
-		<input type="button" value="Add Item" onclick="Studio404.appendCatalog()" />
-		<input type="button" value="Save Changes" id="ChangeCatalog" />
+	<form action="" method="post" id="popup_form" enctype="multipart/form-data">
+		<h4 id="popup_title"></h4>
+		<div class="messagex" style="color:#ff0000"></div>
+		<div id="popup_body">
+		</div>		
 	</form>
 </div>
 <header class="container">

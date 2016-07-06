@@ -20,5 +20,19 @@ class pagedata{
 		return $fetch;
 	}
 
+	public function maxCatalogPosition($conn){
+		$sql = 'SELECT MAX(`position`) as maxpos FROM `pages` WHERE `pagetype`=:pagetype AND `hidden`!=1 AND `status`!=1';
+		$prepare = $conn->prepare($sql);
+		$prepare->execute(array(
+			":pagetype"=>"catalog"
+		));
+		if($prepare->rowCount()){
+			$fetch = $prepare->fetch(\PDO::FETCH_ASSOC);
+		}else{
+			$fetch["maxpos"] = 0;	
+		}
+		return (int)($fetch["maxpos"] + 1);
+	}
+
 }
 ?>
