@@ -107,6 +107,16 @@ class header{
 			"<link type=\"text/css\" rel=\"stylesheet\" href=\"%spublic/css/jquery-ui.css\" />\n",
 			c::WEBSITE
 		);
+
+		$out .= sprintf(
+			"<link type=\"text/css\" rel=\"stylesheet\" href=\"%spublic/css/thumbs2.css\" />\n",
+			c::WEBSITE
+		);
+
+		$out .= sprintf(
+			"<link type=\"text/css\" rel=\"stylesheet\" href=\"%spublic/css/thumbnail-slider.css\" />\n",
+			c::WEBSITE
+		);
 		return $out;
 	}
 
@@ -117,6 +127,11 @@ class header{
 		);
 		$out .= sprintf(
 			"<script src=\"%spublic/js/jquery-ui.js\" type=\"text/javascript\"></script>\n", 
+			c::WEBSITE
+		);
+		
+		$out .= sprintf(
+			"<script src=\"%spublic/js/thumbnail-slider.js\" type=\"text/javascript\"></script>\n", 
 			c::WEBSITE
 		);
 
