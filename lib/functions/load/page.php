@@ -23,6 +23,8 @@ class page{
 		$pagedata = new pagedata();
 		$this->page = $pagedata->select($this->conn);
 		$this->request = new url\request();
+		$this->cururl = new url\currenturl();
+		$this->currenturl = $this->cururl->geturl();
 		$this->receivePost();
 		if(
 			$this->request->method("POST", "ajax")=="true" || 
@@ -30,6 +32,25 @@ class page{
 		){
 			$ajax = new ajax();
 			echo $ajax->geta();	
+			exit();
+		}
+		if(
+			$this->request->method("GET", "crop")=="true" && 
+			$this->request->method("GET", "f") && 
+			is_numeric($this->request->method("GET", "w")) && 
+			is_numeric($this->request->method("GET", "h"))  
+		){
+			try{
+				$crop = new \lib\functions\image\crop();
+				readfile($crop->dojob(
+					$this->request->method("GET", "f"), 
+					$this->request->method("GET", "w"), 
+					$this->request->method("GET", "h"), 
+					0
+				));
+			}catch(exception $e){
+				echo "Error ...";
+			}
 			exit();
 		}
 	}
@@ -42,7 +63,13 @@ class page{
 			$data[3] = $this->request->method("POST","item_catalogList");
 			$projects = new projects();
 			$projects->insert_project($this->conn, $data);
+		}else if($this->request->method("POST","postrequest")=="projectimagesForm"){
+			$data[0] = $this->request->method("POST","proid");
+			$projects = new projects();
+			$projects->insert_project_photos($this->conn, $data);
 		}
+
+		
 	}
 
 	public function bootstap(){

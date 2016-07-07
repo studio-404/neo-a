@@ -193,7 +193,137 @@ class receive{
 					$out["status"] = "true";
 				}				
 				break;
-			}			
+				case "updateProject":
+				$date = strtotime($request[1]);
+				$id = $request[2];
+				$title = $request[3];
+				$content = $request[4];
+				$sql = 'UPDATE `projects` SET `date`=:datex, `title`=:title, `text`=:textx WHERE `id`=:id';
+				$prepare = $this->conn->prepare($sql);
+				$prepare->execute(array(
+					":datex"=>$date,
+					":title"=>$title, 
+					":textx"=>$content, 
+					":id"=>$id 
+				));
+				$out["message"] = "Project updated successfuly !";
+				break;
+				case "removeProjectPhoto":
+				$id = $request[1];
+				$position = $request[2];
+				$sql = 'UPDATE `photoes` SET `status`=1 WHERE `id`=:id';
+				$prepare = $this->conn->prepare($sql);
+				$prepare->execute(array(
+					":id"=>$id 
+				));
+				if($prepare->rowCount()){
+					$sql3 = 'SELECT `id`,`position` FROM `photoes` WHERE `position`>:oldposition AND `status`!=1';
+					$prepare3 = $this->conn->prepare($sql3);
+					$prepare3->execute(array( 
+						":oldposition"=>$position
+					));	
+					if($prepare3->rowCount()){
+						$fetch3 = $prepare3->fetchAll(\PDO::FETCH_ASSOC);
+						foreach ($fetch3 as $val3) {
+							$sql4 = 'UPDATE `photoes` SET `position`=:newposition WHERE `id`=:id';
+							$prepare4 = $this->conn->prepare($sql4);
+							$newposition = $val3['position'] - 1;
+							$prepare4->execute(array(
+								":newposition"=>$newposition,
+								":id"=>$val3['id']
+							));
+						}						
+					}
+					$out["status"] = "true";
+					$out["message"] = "Photo removed successfuly !";
+				}else{
+					$out["status"] = "false";
+					$out["message"] = "Could not remove photo !";
+				}
+				break;
+				case "sortImages":
+				array_shift($request);
+				$newPos = 1;
+				foreach ($request as $image) {
+					$sql = 'UPDATE `photoes` SET `position`=:newposition WHERE `id`=:id';
+					$prepare = $this->conn->prepare($sql);
+					$prepare->execute(array(
+						":newposition"=>$newPos, 
+						":id"=>$image
+					));
+					$newPos++;
+				}
+				$out["message"] = "Position updated !";
+				break;
+				case "removeProject":
+				$sql = 'UPDATE `pages` SET `status`=1 WHERE `id`=:id';
+				$prepare = $this->conn->prepare($sql);
+				$prepare->execute(array(
+					":id"=>$request[1]
+				));
+				if($prepare->rowCount()){
+					$out["status"] = "true";
+					$out["message"] = "Project deleted !";
+				}else{
+					$out["status"] = "false";
+					$out["message"] = "unable delete project !";
+				}
+				break;
+				case "scrollCatalog": 
+				$nums = 8;
+				$slug = $request[1];
+				if($slug=="all" || empty($slug)){
+					$slug_query = '';
+				}else{
+					$slug_query = '`pages`.`slug`=:slug AND '; 
+				}
+				$limit = $request[2].",".$nums;
+				$search = $request[3];
+
+				if($search){
+					$searchKey = $search;
+					$searchQuery = ' AND (
+						`projects`.`title` LIKE "%'.(string)$searchKey.'" OR 
+						`projects`.`title` LIKE "'.(string)$searchKey.'%" OR 
+						`projects`.`title` LIKE "%'.(string)$searchKey.'%" 
+					)';
+				}else{
+					$searchQuery = "";
+				}
+
+				$sql = 'SELECT 
+				`projects`.*, 
+				(SELECT `photoes`.`photo` FROM `photoes` WHERE `projects`.`id`=`photoes`.`projectid` AND `photoes`.`status`!=1 ORDER BY `photoes`.`position` ASC LIMIT 1) AS photo 
+				FROM `pages`, `projects`  WHERE '.$slug_query.'
+				`pages`.`status`!=1 AND 
+				`pages`.`hidden`!=1 AND  
+				`pages`.`id`=`projects`.`pageid` AND 
+				`projects`.`status`!=1'.$searchQuery.' 
+				ORDER BY `projects`.`date` DESC 
+				LIMIT '.$limit;
+				$prepare = $this->conn->prepare($sql);
+				if($slug_query==""){
+					$prepare->execute();
+				}else{
+					$prepare->execute(array(
+						":slug"=>$request[1]
+					));
+				}
+				
+				if($prepare->rowCount()){
+					$fetch = $prepare->fetchAll(\PDO::FETCH_ASSOC);
+					$out["status"] = "true";
+					$out["selected"] = $fetch;
+					$out["limit"] = $request[2] + $nums;
+					$out["message"] = "Project selected !";
+				}else{
+					$out["status"] = "false";
+					$out["selected"] = "false";
+					$out["limit"] = $request[2];
+					$out["message"] = "No more projects !";
+				}
+				break;
+			}
 			echo json_encode($out);
 		}
 

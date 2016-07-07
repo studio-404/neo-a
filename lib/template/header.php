@@ -88,11 +88,11 @@ class header{
 
 	private function favicon(){
 		$out = sprintf(
-			"<link rel=\"icon\" href=\"%spublic/img/favicon.png\" type=\"image/x-icon\"/>\n",
+			"<link rel=\"icon\" href=\"%spublic/img/favicon.ico\" type=\"image/x-icon\"/>\n",
 			c::WEBSITE
 		);
 		$out .= sprintf(
-			"<link rel=\"shortcut icon\" href=\"%spublic/img/favicon.png\" type=\"image/x-icon\"/>\n",
+			"<link rel=\"shortcut icon\" href=\"%spublic/img/favicon.ico\" type=\"image/x-icon\"/>\n",
 			c::WEBSITE
 		);
 		return $out;
@@ -119,10 +119,13 @@ class header{
 			"<script src=\"%spublic/js/jquery-ui.js\" type=\"text/javascript\"></script>\n", 
 			c::WEBSITE
 		);
+
 		$out .= sprintf(
 			"<script src=\"%spublic/js/script.js\" type=\"text/javascript\"></script>\n", 
 			c::WEBSITE
 		);
+
+		
 		return $out;
 	}
 

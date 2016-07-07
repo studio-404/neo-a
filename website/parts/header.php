@@ -27,8 +27,8 @@ if($this->request->method("GET","admin")){
 		</a>
 	</div>
 	<div class="search">
-		<form action="javascript:void(0)" method="post">
-			<input type="text" name="search" value="" autocomplete="off" />
+		<form action="<?=$this->currenturl?>" method="get">
+			<input type="text" name="search" value="<?=(string)$this->request->method("GET","search")?>" autocomplete="off" />
 			<input type="submit" value="" />
 		</form>
 	</div>

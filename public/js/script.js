@@ -1,6 +1,20 @@
 $(document).ready(function(){
 	Studio404.mobileDetect();
 	Studio404.dragAndDrop();
+	$("#projectImageBox").sortable({
+		stop: function(event,ui){ 
+			var prid = "";
+			info = [];
+			info[0] = 'sortImages';
+			var i = 1;
+			$(".gallery-box").each(function(){
+				info[i] = $(this).attr("data-prid");
+				i++;
+			});
+			var json = JSON.stringify(info);
+ 			Studio404.ajaxUpdate(json);
+		}
+	});
 }); 
 
 $(document).on("click", '.copyright', function(e){
@@ -9,6 +23,10 @@ $(document).on("click", '.copyright', function(e){
 
 $(document).on("click", ".content .leftside .text form label", function(){
 	Studio404.fomrInputAnimate($(this));
+});
+
+$(document).on("click","#updateProject", function(){
+	Studio404.updateProject(event);
 });
 
 $(document).on("click", "#updateTheStudio", function(){
@@ -53,6 +71,7 @@ $(window).scroll(function(){
 var Studio404 = {
 	name: "Studio 404",
 	home: "http://neo-a.404.ge",
+	publicFolder: "http://neo-a.404.ge/public/",
 	ajax: "http://neo-a.404.ge/index.php",
 	ajaxUpload: "http://neo-a.404.ge/index.php?ajax=true&uploadFile=true",
 	mobileDetect: function(){
@@ -206,16 +225,52 @@ var Studio404 = {
 			$(".messagex").html(obj.message);
 		});
 	},
-	isAjaxCalled: false,
 	windowScroll: function(){
-		if (($(window).scrollTop() >= ($(document).height() - $(window).height())*0.2) && !this.isAjaxCalled){
-			this.isAjaxCalled= true; 
-		    console.log("scrolled");
-		    this.ajaxRequestOnScroll();
+		if (($(window).scrollTop() >= ($(document).height() - $(window).height())*0.2)){
+			this.ajaxRequestOnScroll();
 		}
 	},
 	ajaxRequestOnScroll: function(){
-		console.log("ajax request done");
+		var called = $(".loaderButton").attr("data-called");
+		var slug = $(".loaderButton").attr("data-slug");
+		var loaded = $(".loaderButton").attr("data-loaded");
+		var par = Studio404.urlParamiters();
+		if(called=="false"){
+			$(".loaderButton").attr("data-called","true"); 
+			info = [];
+			info[0] = 'scrollCatalog';
+			info[1] = slug;
+			info[2] = loaded;
+			info[3] = par["search"];			
+			var json = JSON.stringify(info);
+			$.post(this.ajax, { ajax:"true", r:json }, function(d){
+				var obj = $.parseJSON(d);				
+				var out = '';
+				var catalogList = obj.selected;
+				var date = "";
+				var year = "";
+				if(catalogList!="false"){
+					for (var i = 0; i <= catalogList.length - 1; i++) {
+						out += '<div class="project-item">';
+						out += '<a href="'+Studio404.home+'/view/'+catalogList[i].id+'">';
+						out += '<img src="'+Studio404.home+'/?crop=true&f='+Studio404.publicFolder+'img/projects/'+catalogList[i].photo+'&w=233&h=166" width="100%" alt="">';
+						out += '<p class="text">'+catalogList[i].title+'</p>';
+						date = new Date(catalogList[i].date*1000);
+						year = date.getFullYear();
+						out += '<p class="year">'+year+'</p>';
+						out += '</a>';
+						out += '</div>';
+					}
+				}
+				var limit = obj.limit;
+				$(".loaderButton").attr("data-loaded", limit);
+				$(".project-box").append(out);
+				out = '';
+				$(".loaderButton").attr("data-called","false"); 
+			});
+			console.log(slug + " " + loaded); 
+
+		}
 	},
 	showPopup: function(e, t){
 		$(e).html('Please Wait...');
@@ -257,7 +312,7 @@ var Studio404 = {
 				ins += '<textarea name="item_description" class="textarea" style="margin:10px 0; height:120px" placeholder="Describe..."></textarea>';
 				
 				ins += '<select name="item_catalogList" class="catalogList">';
-				ins += '<option value="">Choose Catalog</option>';
+				// ins += '<option value="">Choose Catalog</option>';
 				var catalogList = obj.catalogList;
 				var slug = $(e).attr("data-slug");
 				for (var i = 0; i <= catalogList.length - 1; i++) {
@@ -303,12 +358,90 @@ var Studio404 = {
 	appendCatalog: function(){
 		var out = '<div class="formbox">';
 		out += '<input type="hidden" name="item" data-type="item" value="new" />';
-		out += '<input type="text" data-type="title" name="title" value="" />';
-		out += '<input type="text" data-type="slug" name="slug" value="" />';
+		out += '<input type="text" data-type="title" name="title" value="" placeholder="Title" />';
+		out += '<input type="text" data-type="slug" name="slug" value="" placeholder="Slug" />';
 		out += '</div><div class="clearer"></div>';
 		$(".recivedData").append(out);
 	},
 	closePopup: function(){
 		$(".mask, .popup").fadeOut(); 
+	},
+	updateProject: function(){
+		var project_date = $("#project_date").val();
+		var project_id = $("#updateProject").attr("data-prid");
+		var project_title = $("#project_title").val();
+		var project_content = $("#project_content").val();
+		$(".messagex").html('Please Wait...');
+		info = [];
+		info[0] = 'updateProject';
+		info[1] = project_date;
+		info[2] = project_id;
+		info[3] = project_title;
+		info[4] = project_content;
+		var json = JSON.stringify(info);
+	 	$.post(this.ajax, { ajax:"true", r:json }, function(d){
+	 		var obj = $.parseJSON(d);
+	 		$(".messagex").html(obj.message);
+	 	});
+	}, 
+	addMoreProjectPhotoes: function(){
+		var fi = "<input type=\"file\" name=\"projectimages[]\" value=\"\" style=\"margin:5px 0; width:100%\" />";
+		$("#projectimagesForm").append(fi);
+	},
+	removeProjectPhoto: function(i,p){
+		if(confirm("Would you like to remove photo ?")){
+			$(".messagex").html('Please Wait...');
+			info = [];
+			info[0] = 'removeProjectPhoto';
+			info[1] = i;
+			info[2] = p;
+			var json = JSON.stringify(info);
+
+		 	$.post(this.ajax, { ajax:"true", r:json }, function(d){
+		 		var obj = $.parseJSON(d);
+		 		if(obj.status=="true"){
+		 			$(".i_"+i).fadeOut();
+		 		}
+		 		$(".messagex").html(obj.message);
+		 	});
+		}
+	},
+	deleteProject: function(i){
+		if(confirm("Would you like to remove project ?")){
+			$(".messagex").html('Please Wait...');
+			info = [];
+			info[0] = 'removeProject';
+			info[1] = i;
+			var json = JSON.stringify(info);
+
+		 	$.post(this.ajax, { ajax:"true", r:json }, function(d){
+		 		var obj = $.parseJSON(d);
+		 		if(obj.status=="true"){
+		 			location.href = this.home;
+		 		}
+		 		$(".messagex").html(obj.message);
+		 	});
+		}
+	}, 
+	urlParamiters: function(){
+		var query_string = new Array();
+		var query = window.location.search.substring(1);
+		var vars = query.split("&");
+		for (var i=0;i<vars.length;i++) {
+			var pair = vars[i].split("=");
+			if (typeof query_string[pair[0]] === "undefined") {
+			  query_string[pair[0]] = pair[1];
+			} else if (typeof query_string[pair[0]] === "string") {
+			  var arr = [ query_string[pair[0]], pair[1] ];
+			  query_string[pair[0]] = arr;
+			} else {
+				if(query_string.length){
+			  		query_string[pair[0]].push(pair[1]);
+				}else{
+					query_string[pair[0]] = '';
+				}
+			}
+		} 
+		return query_string;		
 	}
 };
