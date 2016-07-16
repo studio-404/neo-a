@@ -28,9 +28,11 @@ if($this->request->method("GET","admin")){
 	</div>
 	<div class="search">
 		<form action="<?=$this->currenturl?>" method="get">
-			<input type="text" name="search" value="<?=(string)$this->request->method("GET","search")?>" autocomplete="off" />
+			<input type="text" name="search" value="<?=(string)$this->request->method("GET","search")?>" autocomplete="off" onclick="Studio404.searchBoxAnimate('click')" onblur="Studio404.searchBoxAnimate('blur')" />
 			<input type="submit" value="" />
 		</form>
+		<div class="leftline"></div>
+		<div class="rightline"></div>
 	</div>
 	<nav class="navigation">
 		<ul class="mainMenu">

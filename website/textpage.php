@@ -31,7 +31,16 @@
 		?>
 	</div>
 	<div class="rightside" id="img">
-		<img src="<?=$c::PUBLIC_FOLDER?>img/team/<?=$this->page['picture']?>" width="100%" />
+		<?php
+		$image = new lib\functions\image\crop(); 
+		$src = $image->dojob(
+			$c::WEBSITE.$c::PUBLIC_FOLDER_NAME."/img/team/".$this->page['picture'], 
+			858, 
+			517, 
+			0
+		);
+		?>
+		<img src="<?=$src?>" width="100%" alt="team" />
 	</div>
 </main>
 <?php

@@ -38,7 +38,7 @@ class projects{
 			`pages`.`pagetype`="catalog" AND 
 			`pages`.`id`=`projects`.`pageid` AND 
 			`projects`.`status`!=1'.$searchQuery.'
-			ORDER BY `projects`.`date` DESC LIMIT 8 
+			ORDER BY `projects`.`date` DESC LIMIT 12 
 			';
 			$prepare = $conn->prepare($sql);
 			$prepare->execute();
@@ -56,7 +56,7 @@ class projects{
 			`pages`.`status`!=1 AND
 			`pages`.`id`=`projects`.`pageid` AND
 			`projects`.`status`!=1'.$searchQuery.'  
-			ORDER BY `projects`.`date` DESC LIMIT 8 
+			ORDER BY `projects`.`date` DESC LIMIT 12
 			';
 			$prepare = $conn->prepare($sql);
 			$prepare->execute(array(
@@ -97,8 +97,13 @@ class projects{
 		$prepare->execute(array(
 			":id"=>$this->params[1] 
 		));
-		$fetch = $prepare->fetchAll(\PDO::FETCH_ASSOC); 
-		return $fetch; 
+		if($prepare->rowCount()){
+			$fetch = $prepare->fetchAll(\PDO::FETCH_ASSOC); 
+			return $fetch; 
+		}else{
+			$redirect = new \lib\functions\url\redirect();
+			$redirect->url(c::WEBSITE);
+		}
 	} 
 
 	public function insert_project($conn, $data){
@@ -126,6 +131,7 @@ class projects{
 			$x = 0;
 			$p = 1; 
 			foreach ($_FILES['item_file']['name'] as $val) {
+				if(empty($_FILES["item_file"]["name"][$x])){ continue; }
 				$imageFileType = explode(".", $_FILES["item_file"]["name"][$x]);
 				$imageFileType = end($imageFileType);
 				

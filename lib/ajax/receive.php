@@ -256,11 +256,17 @@ class receive{
 				$out["message"] = "Position updated !";
 				break;
 				case "removeProject":
-				$sql = 'UPDATE `pages` SET `status`=1 WHERE `id`=:id';
+				$sql = 'UPDATE `projects` SET `status`=1 WHERE `id`=:id';
 				$prepare = $this->conn->prepare($sql);
 				$prepare->execute(array(
 					":id"=>$request[1]
 				));
+				$sql2 = 'UPDATE `photoes` SET `status`=1 WHERE `projectid`=:projectid';
+				$prepare2 = $this->conn->prepare($sql2);
+				$prepare2->execute(array(
+					":projectid"=>$request[1]
+				));
+
 				if($prepare->rowCount()){
 					$out["status"] = "true";
 					$out["message"] = "Project deleted !";

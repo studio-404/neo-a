@@ -12,7 +12,7 @@
 			<form action="javascript:void(0)" method="POST">
 			<div class="messagex" style="color:#ff0000"></div>
 			<label data-input="date">date</label>
-			<input type="text" id="project_date" name="date" value="<?=date("m-d-Y", $this->projectDesc[0]["row2"])?>" style="height:25px" />
+			<input type="text" id="project_date" name="date" placeholder="Date Format: dd-mm-YYYY" value="<?=date("d-m-Y", $this->projectDesc[0]["row2"])?>" style="height:25px" />
 			<label data-input="title">Title</label>
 			<input type="text" id="project_title" name="title" value="<?=$this->projectDesc[0]["row3"]?>" style="height:25px" />
 			<label data-input="content">Content</label>
@@ -46,12 +46,14 @@
 						0
 					);
 					echo sprintf(
-						"<div class=\"gallery-box i_%s\" id=\"gallery-box\" style=\"width:120px; float:left; margin:5px 5px 5px 0\" data-prid=\"%s\">
+						"<div class=\"gallery-box i_%s\" id=\"gallery-box\" style=\"width:%s; float:left; margin:5px %s 5px 0\" data-prid=\"%s\">
 							<img src=\"%s\" width=\"%s\" alt=\"\" style=\"float:left\" />
 							<a href=\"javascript:void(0)\" style=\"width:%s; line-height:25px; background-color:#000000; color:white; text-align:center; float:left; display:block; text-decoration:none\" onclick=\"Studio404.removeProjectPhoto('".$v['row1']."', '".$v['row4']."')\">Delete Item</a>
 						</div>
 						",
 						$v['row1'], 
+						"24%",
+						"1%",
 						$v['row1'], 
 						$src,
 						"100%",
@@ -68,16 +70,103 @@
 				";
 				
 			}
-		}else{
-			if(is_array($this->projectPhotos) && count($this->projectPhotos)){
-				foreach ($this->projectPhotos as $v) {
-					echo sprintf(
-						"%simg/projects/%s<br />",
-						$c::PUBLIC_FOLDER,
-						$v['row3']
-					);
+		}else{			
+			?>	
+			<div class="slider-container">
+				<?php
+				$image = new lib\functions\image\crop(); 
+				if(count($this->projectPhotos)==1){
+					foreach ($this->projectPhotos as $v) {
+						$src = $image->dojob(
+							$c::WEBSITE.$c::PUBLIC_FOLDER_NAME."/img/projects/".$v['row3'], 
+							858, 
+							517, 
+							0
+						);
+						echo sprintf(
+							'<img src="%s" width="%s" height="517" alt="" />',
+							$src,
+							"100%"
+						);
+					}
+				}else if(count($this->projectPhotos) > 1){
+				?>
+				<div class="slider-thumbs">
+					<ul>
+						<li class="topNav">
+							<a href="javascript:void(0)">&nbsp;</a>
+						</li>
+						
+						<?php
+						if(is_array($this->projectPhotos) && count($this->projectPhotos)){
+							$i = 1;
+							foreach ($this->projectPhotos as $v) {
+								$src = $image->dojob(
+									$c::WEBSITE.$c::PUBLIC_FOLDER_NAME."/img/projects/".$v['row3'], 
+									106, 
+									73, 
+									0
+								);
+								echo sprintf(
+									'
+									<li class="item">
+									<a href="javascript:void(0)" onclick="Studio404Slider.goToPosition(%d)">
+									<img src="%s" width="%s" alt="" border="0" />
+									</a>
+									</li>
+									',
+									$i,
+									$src,
+									"100%"
+								);
+								$i++;
+							}
+						}
+						?>						
+						
+						<li class="bottomNav">
+							<a href="javascript:void(0)">&nbsp;</a>
+						</li>
+					</ul>
+				</div>
+
+				<div class="slider-image">
+					<ul>
+						<?php
+						if(is_array($this->projectPhotos) && count($this->projectPhotos)){
+							
+							foreach ($this->projectPhotos as $v) {
+								$src = $image->dojob(
+									$c::WEBSITE.$c::PUBLIC_FOLDER_NAME."/img/projects/".$v['row3'], 
+									737, 
+									517, 
+									0
+								);
+								echo sprintf(
+									'
+									<li class="item">
+									<a href="javascript:void(0)" onclick="Studio404Slider.next(Studio404Slider.currentPosition)">
+									<img src="%s" width="%s" height="517" alt="" />
+									</a>
+									</li>
+									',
+									$src,
+									"100%"
+								);
+							}
+						}
+						?>	
+						
+					</ul>					
+				</div>
+				<?php
+				}else{
+					echo "No Image";
 				}
-			}
+				?>
+
+			</div>
+			<?php
 		}
 		?>
 	</div>	
