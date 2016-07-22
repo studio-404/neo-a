@@ -305,11 +305,15 @@ var Studio404 = {
 			icon.removeClass("close");
 			$(".mobileNav ul").html(this.selectMenuItems());
 			$(".mobileNav").slideUp("slow");
+			$(".container .navigation ul .icon").css({"position":"relative"});
+			$(".container .navigation ul .icon a").css({"border":"solid 1px #000000", "background-image":"url('"+this.home+"/public/img/nav.png')" });
 		}else{
 			// closed
 			icon.addClass("close");
 			$(".mobileNav ul").html(this.selectMenuItems());
 			$(".mobileNav").slideDown("slow");
+			$(".container .navigation ul .icon").css({"position":"fixed"});
+			$(".container .navigation ul .icon a").css({"border":"solid 1px #ffffff", "background-image":"url('"+this.home+"/public/img/close2.png')"});
 		}
 
 	},

@@ -137,7 +137,7 @@ if($this->request->method("GET","admin")){
 			echo '</ul>';
 		?>
 	</nav>
-	<div class="mobileNav" style="display:none">
-		<ul></ul>
-	</div>
 </header>
+<div class="mobileNav" style="display:none">
+		<ul></ul>
+</div>
