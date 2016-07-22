@@ -15,7 +15,7 @@
 					$c::WEBSITE.$c::PUBLIC_FOLDER_NAME."/img/projects/".$value['p_photo'], 
 					233, 
 					166, 
-					0
+					1
 				);
 				echo sprintf(
 					'<div class="project-item">

@@ -2,6 +2,7 @@ $(document).ready(function(){
 	Studio404.mobileDetect();
 	Studio404.dragAndDrop();
 	Studio404Slider.bootstap();
+	Studio404Slider.dragSlideImage();
 	$("#projectImageBox").sortable({
 		tolerance: "pointer",
 		start: function (event, ui) {
@@ -219,6 +220,33 @@ var Studio404Slider = {
 			$(this.main+" ul li").css("width", this.mainWidth()+"px");
 		}
 		
+	},
+	dragSlideImage: function(){
+		// var prevX = -1;
+		// $('.content .rightside .slider-container .slider-image ul .item').draggable({
+		// 	axis: "x",
+		//     drag: function(e) {
+		//         //console.log(e.pageX);
+
+		//         if(prevX == -1) {
+		//             prevX = e.pageX;    
+		//             return false;
+		//         }
+		//         // dragged left
+		//         if(prevX > e.pageX) {
+		//             console.log('dragged left');
+		//             Studio404Slider.goToPosition(Studio404Slider.currentPosition-1);
+		//             return false;
+
+		//         }
+		//         else if(prevX < e.pageX) { // dragged right
+		//             console.log('dragged right');
+		//             Studio404Slider.goToPosition(Studio404Slider.currentPosition+1);
+		//             return false;
+		//         }
+		//         prevX = e.pageX;
+		//     }
+		// });
 	}
 };
 
@@ -250,7 +278,7 @@ var Studio404 = {
     },
 	selectMenuItems: function(){
 		var ins = '<li>';
-		ins += '<form action="javascript:void(0)" method="post">';
+		ins += '<form action="'+Studio404.home+'" method="get">';
 		ins += '<input type="text" name="search" value="" autocomplete="off" />';
 		ins += '<input type="submit" value="" />';
 		ins += '</form><div class="clearer"></div>';
@@ -381,9 +409,9 @@ var Studio404 = {
 		});
 	},
 	windowScroll: function(){
-		if (($(window).scrollTop() >= ($(document).height() - $(window).height())*0.2)){
-			this.ajaxRequestOnScroll();
-		}
+		// if (($(window).scrollTop() >= ($(document).height() - $(window).height())*0.2)){
+		// 	this.ajaxRequestOnScroll();
+		// }
 	},
 	ajaxRequestOnScroll: function(){
 		var called = $(".loaderButton").attr("data-called");
@@ -641,6 +669,29 @@ var Studio404 = {
 		var name = $("#name").val();
 		var email = $("#email").val();
 		var message = $("#message").val();
-		$(".messagex").text("Please Wait...").fadeIn("slow");
+		if(name=="" || email=="" || message==""){
+			$(".messagex").text("All Fields are required !").fadeIn("slow");	
+		}else{
+			$(".messagex").text("Please Wait...").fadeIn("slow");
+			info = [];
+			info[0] = 'sendEmail';
+			info[1] = name;
+			info[2] = email;
+			info[3] = message;
+			var json = JSON.stringify(info);
+
+		 	$.post(this.ajax, { ajax:"true", r:json }, function(d){
+		 		var obj = $.parseJSON(d);
+		 		$(".messagex").html(obj.message);
+		 		if(obj.status=="true"){
+		 			$("#name").val('');
+					$("#email").val('');
+					$("#message").val('');
+		 		}
+		 	});
+		}
+	},
+	goToProjectPage: function(){
+		location.href = this.home + "/projects";
 	}
 };

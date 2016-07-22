@@ -24,7 +24,7 @@
 		?>
 			<div class="title"><?=$this->page['sub_title']?></div>
 			<div class="text">
-				<?=html_entity_decode($this->page['text'])?>
+				<?=nl2br($this->page['text'])?>
 			</div>
 		<?php
 		}

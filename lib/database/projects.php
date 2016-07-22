@@ -38,7 +38,7 @@ class projects{
 			`pages`.`pagetype`="catalog" AND 
 			`pages`.`id`=`projects`.`pageid` AND 
 			`projects`.`status`!=1'.$searchQuery.'
-			ORDER BY `projects`.`date` DESC LIMIT 12 
+			ORDER BY `projects`.`date` DESC
 			';
 			$prepare = $conn->prepare($sql);
 			$prepare->execute();
@@ -56,7 +56,7 @@ class projects{
 			`pages`.`status`!=1 AND
 			`pages`.`id`=`projects`.`pageid` AND
 			`projects`.`status`!=1'.$searchQuery.'  
-			ORDER BY `projects`.`date` DESC LIMIT 12
+			ORDER BY `projects`.`date` DESC
 			';
 			$prepare = $conn->prepare($sql);
 			$prepare->execute(array(
@@ -74,7 +74,8 @@ class projects{
 		`projects`.`date` AS row2, 
 		`projects`.`title` AS row3, 
 		`projects`.`text` AS row4,  
-		`projects`.`position` AS row5  
+		`projects`.`position` AS row5,  
+		`projects`.`pageid` AS row6
 		FROM 
 		`projects`
 		WHERE 
@@ -86,7 +87,8 @@ class projects{
 		`photoes`.`projectid` AS ph_projectid, 
 		`photoes`.`photo` AS ph_photo, 
 		`photoes`.`status` AS ph_status, 
-		`photoes`.`position` AS ph_position
+		`photoes`.`position` AS ph_position, 
+		`photoes`.`position` AS ph_positionx 
 		FROM 
 		`photoes`
 		WHERE 

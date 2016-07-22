@@ -5,13 +5,6 @@ use config\main as c;
 
 class crop{
 	public function dojob($f, $w, $h, $blackAndWhite){
-		// $f = filter_input(INPUT_GET, "f"); 
-		// $f = str_replace( array("\\",";","(",")"), array("","","",""), strip_tags($f));
-		// $w = filter_input(INPUT_GET, "w"); 
-		// $w = str_replace( array("\\",";","(",")"), array("","","",""), strip_tags($w));
-		// $h = filter_input(INPUT_GET, "h"); 
-		// $h = str_replace( array("\\",";","(",")"), array("","","",""), strip_tags($h));
- 
 		$img = $f;
 		$w = is_null($w) ? $h : $w;
 		$h = is_null($h) ? $w : $h;
@@ -20,7 +13,7 @@ class crop{
 			return false;
 		} 
 		
-		$cache_file_name = sha1('crop_' . $img . $w . $h) . '.' . $ext;
+		$cache_file_name = sha1('crop_' . $img . $w . $h . $blackAndWhite) . '.' . $ext;
 		
 		$file_path = c::PUBLIC_FOLDER_NAME.'/temporaty/' . $cache_file_name;
 
@@ -100,7 +93,8 @@ class crop{
 	private function ImageToBlackAndWhite($im) {
 		try{
 			imagefilter($im, IMG_FILTER_GRAYSCALE);
-			imagefilter($im, IMG_FILTER_CONTRAST, -100);
+			imagefilter($im, IMG_FILTER_CONTRAST, 0);
+			imagefilter($im, IMG_FILTER_BRIGHTNESS, 10); 
 		}catch(Exception $e){ 
 			return false;
 		}

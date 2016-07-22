@@ -17,7 +17,8 @@ class header{
 		$this->page = $pagedata->select($this->conn);
 	}
 
-	public function html_header(){
+	public function html_header($pageTitle = false){
+		if($pageTitle){ $this->page['title'] = $pageTitle; }
 		$out = "<!DOCTYPE html>\n";
 		$out .= "<html>\n";
 		$out .= "<head>\n";
@@ -42,7 +43,7 @@ class header{
 			currenturl::geturl()
 		);
 		$out .= sprintf(
-			"<meta property=\"og:image\" content=\"%spublic/img/fbshare.png\" />\n",
+			"<meta property=\"og:image\" content=\"%spublic/img/share.jpg\" />\n",
 			C::WEBSITE
 		);
 		$out .= "<meta property=\"og:image:width\" content=\"600\" />\n";

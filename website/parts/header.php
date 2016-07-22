@@ -27,7 +27,14 @@ if($this->request->method("GET","admin")){
 		</a>
 	</div>
 	<div class="search">
-		<form action="<?=$this->currenturl?>" method="get">
+	<?php
+	if($this->params[0]=="view" || $this->params[0]=="the-studio" || $this->params[0]=="contact-us"){
+		$action = $c::WEBSITE;
+	}else{
+		$action = $this->currenturl;
+	}
+	?>
+		<form action="<?=$action?>" method="get">
 			<input type="text" name="search" value="<?=(string)$this->request->method("GET","search")?>" autocomplete="off" onclick="Studio404.searchBoxAnimate('click')" onblur="Studio404.searchBoxAnimate('blur')" />
 			<input type="submit" value="" />
 		</form>
@@ -39,6 +46,8 @@ if($this->request->method("GET","admin")){
 			<?php
 			foreach ($this->nav as $n) {
 				if(empty($this->params[0]) && $n['slug']=="projects"){
+					$active = "active";
+				}else if($this->params[0]=="view" && $n['slug']=="projects"){
 					$active = "active";
 				}else if($this->params[0]==$n['slug']){
 					$active = "active";
@@ -75,6 +84,8 @@ if($this->request->method("GET","admin")){
 		</ul>
 		<?php if(count($this->cat)): 
 			$x=1;
+			$viewSlug = new \lib\database\getSlug();
+			$getSlug = $viewSlug->select($this->conn, $this->projectDesc[0]["row6"]);
 			foreach ($this->cat as $n) {
 				if($x==1){
 					echo '<ul class="sub sub-'.$n['sub'].'">';
@@ -82,6 +93,11 @@ if($this->request->method("GET","admin")){
 				if(empty($this->params[1]) && $n['slug']=="all"){
 					$active = "active";
 				}else if($this->params[1]==$n['slug']){
+					$active = "active";
+				}else if(
+					!empty($this->projectDesc[0]["row1"]) && 
+					$getSlug==$n['slug']
+				){
 					$active = "active";
 				}else{
 					$active = "";

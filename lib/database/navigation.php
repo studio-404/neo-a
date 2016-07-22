@@ -30,6 +30,7 @@ class navigation{
 
 	public function checkSub($conn, $params){
 		if(empty($params[0])){ $params[0]="projects"; }
+		else if($params[0]=="view"){ $params[0]="projects"; }
 		$sql = 'SELECT `id` FROM `pages` WHERE `slug`=:slug AND`pagetype`!="catalog" AND `hidden`!=1 AND `status`!=1 ORDER BY `position` ASC';
 		$prepare = $conn->prepare($sql);
 		$prepare->execute(array(

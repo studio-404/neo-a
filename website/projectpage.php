@@ -1,7 +1,7 @@
 <?php
 @include('website/parts/header.php');
 ?>
-<main class="content">
+<main class="content" style="padding:20px 0">
 	<div class="leftside">
 		<?php
 		if($this->request->method("GET","admin")=="true" && isset($_SESSION[$c::SESSION_PREFIX."username"])){
@@ -26,7 +26,7 @@
 		?>
 		<div class="title"><?=$this->projectDesc[0]["row3"]?></div>
 		<div class="text">
-			<?=$this->projectDesc[0]["row4"]?>
+			<?=nl2br($this->projectDesc[0]["row4"])?>
 		</div>
 		<?php
 		}

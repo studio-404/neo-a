@@ -329,6 +329,30 @@ class receive{
 					$out["message"] = "No more projects !";
 				}
 				break;
+				case "sendEmail":
+				if(empty($request[1]) || empty($request[2]) || empty($request[3])){
+					$out["status"] = "false";
+					$out['message'] = "All fields are required !";
+				}else{
+					$message = "<b>IP: </b>".$_SERVER['REMOTE_ADDR']."<br />"; 
+					$message .= "<b>Name: </b>".$request[1]."<br />"; 
+					$message .= "<b>Email: </b>".$request[2]."<br />"; 
+					$message .= "<b>Message: </b><br /><br />".$request[3]; 
+					$email = new \lib\functions\email\sendemail();
+					if($email->send(
+						c::EMAIL_TO_NAME, 
+						c::EMAIL_TO, 
+						c::EMAIL_SUBJECT, 
+						$message
+					)){
+						$out["status"] = "true";
+						$out['message'] = "Message has been sent !";
+					}else{
+						$out["status"] = "false";
+						$out['message'] = "We were anable to send message !";
+					}
+				}
+				break;
 			}
 			echo json_encode($out);
 		}
